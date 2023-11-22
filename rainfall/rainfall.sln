@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Console\Console.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileService", "FileService\FileService.csproj", "{09C72E25-8AE3-4010-A703-DC456CB0EA62}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreService", "CoreService\CoreService.csproj", "{473C8F20-03C3-4562-B3AC-C56A02FEE5EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{09C72E25-8AE3-4010-A703-DC456CB0EA62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09C72E25-8AE3-4010-A703-DC456CB0EA62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09C72E25-8AE3-4010-A703-DC456CB0EA62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{473C8F20-03C3-4562-B3AC-C56A02FEE5EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{473C8F20-03C3-4562-B3AC-C56A02FEE5EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{473C8F20-03C3-4562-B3AC-C56A02FEE5EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{473C8F20-03C3-4562-B3AC-C56A02FEE5EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
