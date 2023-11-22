@@ -1,6 +1,6 @@
 using CsvHelper.Configuration.Attributes;
 
-namespace Models.DeviceData;
+namespace CoreService.Models.DeviceData;
 public class DeviceData
 {
     [Index(0)]
@@ -9,4 +9,5 @@ public class DeviceData
     public string Name { get; set; }
     [Index(2)]
     public string Location { get; set; }
+
 }

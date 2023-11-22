@@ -1,7 +1,7 @@
 
 using CsvHelper.Configuration.Attributes;
 
-namespace Models.RainfallData;
+namespace CoreService.Models.RainfallData;
 
 public class RainfallData
 {
@@ -13,5 +13,11 @@ public class RainfallData
     [Index(2)]
 
     public int Rainfall { get; set; }
+
+    public override string ToString()
+    {
+
+        return String.Format("Id: {0} Time: {1} Rainfall: {2}", this.Id, this.Time, this.Rainfall);
+    }
 
 }
