@@ -4,18 +4,14 @@ using CoreService.Models.DeviceData;
 using CoreService.Models.RainfallData;
 
 
-
-
-
 var dict = new Dictionary<string, List<RainfallData>>();
 
 var device_path = "C:\\Users\\61421\\Documents\\webdev-2023\\rainfall\\data\\Devices.csv";
-var data_path = "C:\\Users\\61421\\Documents\\webdev-2023\\rainfall\\data\\Data1.csv";
+var data_folder = "C:\\Users\\61421\\Documents\\webdev-2023\\rainfall\\data";
 
-FileService.DataReader<DeviceData, RainfallData>.LoadDataToDictionaryKeys(device_path, "Id", dict);
-FileService.DataReader<DeviceData, RainfallData>.LoadDataToDictionaryValues(data_path, "Id", dict);
+List<RainfallData> rainfall_data = new();
 
-Printer<RainfallData>.Print(dict);
+FileService.DataReader.LoadFolderDataToList(data_folder, rainfall_data);
 
 
 

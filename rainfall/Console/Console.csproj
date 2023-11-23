@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FileService\FileService.csproj" />
     <ProjectReference Include="..\CoreService\CoreService.csproj" />
+    <ProjectReference Include="..\HelperService\HelperService.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
