@@ -19,7 +19,14 @@ public class Helper
                 dict.Add(row.Id, new List<V>());
             }
         });
-        lstV.ForEach(row => dict[row.Id].Add(row));
+        lstV.ForEach(row =>
+        {
+            if (dict.ContainsKey(row.Id)) dict[row.Id].Add(row);
+            else
+            {
+                throw new KeyNotFoundException(string.Format("{0}", row.Id));
+            }
+        });
         return dict;
     }
 }

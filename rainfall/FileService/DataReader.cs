@@ -1,8 +1,6 @@
 ﻿using System.Globalization;
-using System.Reflection;
 using CsvHelper;
-using CsvHelper.Configuration;
-using CsvHelper.TypeConversion;
+
 
 namespace FileService;
 
@@ -18,24 +16,34 @@ public class DataReader
     /// <returns></returns>
     public static void LoadFileDataToList<T>(string path, List<T> lst)
     {
-        Console.WriteLine("Data loading from {0}", path);
-        using (var reader = new StreamReader(path))
-        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+        try
         {
-            // read device data and prepare for sorting of data
-
-            var data = csv.GetRecords<T>();
-            try
+            using (
+                var reader = new StreamReader(path)
+                )
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-                foreach (var row in data)
+                // read device data and prepare for sorting of data
+
+                var data = csv.GetRecords<T>();
+                try
                 {
-                    lst.Add(row);
+                    foreach (var row in data)
+                    {
+                        lst.Add(row);
+                    }
+                }
+                catch
+                {
+                    // Some csv in the data folder might have the wrong data type. Thats ok just move on.
+                    // Console.WriteLine("{0} has the wrong data type", path);
                 }
             }
-            catch
-            {
-                Console.WriteLine("{0} has the wrong data type", path);
-            }
+        }
+        catch (FileNotFoundException e)
+        {
+            Console.WriteLine("Error: File '{0}' not found", path);
+            Environment.Exit(1);
         }
     }
 
@@ -50,7 +58,8 @@ public class DataReader
             }
             catch
             {
-                Console.WriteLine("{0} did not have the correct type of data", file);
+                //Some files will have the wrong type of data and thats ok, just move on.
+                // Console.WriteLine("{0} did not have the correct type of data", file);
             }
         }
     }
