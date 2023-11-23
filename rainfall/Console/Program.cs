@@ -17,6 +17,6 @@ var sorted_data = HelperService.Helper.SortIntoDictionary(device_data, rainfall_
 
 // Printer.PrintDictionary(sorted_data);
 var processor = new Processor(sorted_data);
-Printer.Print(processor.processedData);
+Printer.Print(processor.outputData);
 
 

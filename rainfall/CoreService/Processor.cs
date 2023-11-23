@@ -11,23 +11,23 @@ public class Processor
     DateTime currentTime;
     DateTime cutoff;
 
-    public Dictionary<string, OutputData> processedData = new();
+    public Dictionary<string, OutputData> outputData = new();
 
     public Processor(Dictionary<string, List<RainfallData>> dict)
     {
         this.dict = dict;
         foreach (var key in dict.Keys)
         {
-            processedData.Add(key, new OutputData() { Id = key });
+            outputData.Add(key, new OutputData() { Id = key });
         }
-        setCurrentTime();
+        SetCurrentTime();
         cutoff = currentTime.AddHours(-4);
         CalculateRecentRainfallAvgs();
         DetermineClassifications();
         DetermineTrends();
     }
 
-    private void setCurrentTime()
+    private void SetCurrentTime()
     {
         var data = dict.Values.ToList();
         this.currentTime = DateTime.MinValue;
@@ -61,14 +61,14 @@ public class Processor
     private void CalculateRecentRainfallAvgs()
     {
         var avgs = RecentRainfallAvgs();
-        avgs.ForEach(tup => processedData[tup.Item1].Avg = tup.Item2);
+        avgs.ForEach(tup => outputData[tup.Item1].Avg = tup.Item2);
     }
 
     private void DetermineClassifications()
     {
         foreach (var key in dict.Keys)
         {
-            processedData[key].Classification = Classify(dict[key]);
+            outputData[key].Classification = Classify(dict[key]);
         }
     }
 
@@ -98,7 +98,7 @@ public class Processor
     {
         foreach (var key in dict.Keys)
         {
-            processedData[key].Trend = DetermineTrend(dict[key]);
+            outputData[key].Trend = DetermineTrend(dict[key]);
         }
     }
     private Trend DetermineTrend(List<RainfallData> lst)
