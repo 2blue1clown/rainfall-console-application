@@ -1,54 +1,58 @@
 ﻿using System.Globalization;
 using System.Reflection;
 using CsvHelper;
+using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
 
 namespace FileService;
 
-public class DataReader<T, V>
+public class DataReader
 {
-    public static Dictionary<string, List<V>> LoadDataToDictionaryKeys(string path, string keyProp, Dictionary<string, List<V>> dict)
+
+    /// <summary>
+    /// Puts data from file into given list
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="path"></param>
+    /// <param name="lst"></param>
+    /// <returns></returns>
+    public static void LoadFileDataToList<T>(string path, List<T> lst)
     {
+        Console.WriteLine("Data loading from {0}", path);
         using (var reader = new StreamReader(path))
         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
         {
             // read device data and prepare for sorting of data
+
             var data = csv.GetRecords<T>();
-
-            foreach (var row in data)
+            try
             {
-                PropertyInfo propInfo = row.GetType().GetProperty(keyProp);
-                string key = (string)propInfo.GetValue(row, null);
-
-                if (!dict.ContainsKey(key))
+                foreach (var row in data)
                 {
-                    dict.Add(key, new List<V>());
+                    lst.Add(row);
                 }
             }
-        }
-        return dict;
-    }
-
-    public static Dictionary<string, List<V>> LoadDataToDictionaryValues(string path, string keyProp, Dictionary<string, List<V>> dict)
-    {
-
-        using (var reader = new StreamReader(path))
-        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-        {
-            // read device data and prepare for sorting of data
-            var data = csv.GetRecords<V>();
-
-            foreach (var row in data)
+            catch (BadDataException e)
             {
-                PropertyInfo propInfo = row.GetType().GetProperty(keyProp);
-                string key = (string)propInfo.GetValue(row, null);
-
-                dict[key].Add(row);
-
+                Console.WriteLine("{0} has the wrong data type", path);
             }
         }
-
-        return dict;
     }
 
+
+    public static void LoadFolderDataToList<T>(string path, List<T> lst)
+    {
+        foreach (string file in Directory.EnumerateFiles(path))
+        {
+            try
+            {
+                LoadFileDataToList<T>(file, lst);
+            }
+            catch (TypeConverterException e)
+            {
+                Console.WriteLine("{0} did not have the correct type of data", file);
+            }
+        }
+    }
 
 }
