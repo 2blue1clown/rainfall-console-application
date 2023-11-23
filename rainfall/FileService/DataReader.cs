@@ -32,7 +32,7 @@ public class DataReader
                     lst.Add(row);
                 }
             }
-            catch (BadDataException e)
+            catch
             {
                 Console.WriteLine("{0} has the wrong data type", path);
             }
@@ -48,7 +48,7 @@ public class DataReader
             {
                 LoadFileDataToList<T>(file, lst);
             }
-            catch (TypeConverterException e)
+            catch
             {
                 Console.WriteLine("{0} did not have the correct type of data", file);
             }
