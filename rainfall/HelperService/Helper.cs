@@ -14,7 +14,7 @@ public class Helper
         var dict = new Dictionary<string, List<V>>();
         lstT.ForEach(row =>
         {
-            if (!dict.ContainsKey(row.Id))
+            if (!dict.ContainsKey(row.Id) && row.Id.Length > 0)
             {
                 dict.Add(row.Id, new List<V>());
             }
