@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
+﻿
+using CoreService.Models.OutputData;
 using CoreService.Models.RainfallData;
 
 namespace CoreService;
@@ -8,11 +8,21 @@ public class Processor
 {
     Dictionary<string, List<RainfallData>> dict;
     DateTime currentTime;
+    DateTime cutoff;
+
+    public Dictionary<string, OutputData> processedData = new();
 
     public Processor(Dictionary<string, List<RainfallData>> dict)
     {
         this.dict = dict;
-        this.setCurrentTime();
+        foreach (var key in dict.Keys)
+        {
+            processedData.Add(key, new OutputData() { Id = key });
+        }
+        setCurrentTime();
+        cutoff = currentTime.AddHours(-4);
+        CalculateRecentRainfallAvgs();
+        DetermineClassifications();
     }
 
     private void setCurrentTime()
@@ -23,7 +33,7 @@ public class Processor
         {
             if (DateTime.Compare(currentTime, row.Time) < 0)
             {
-                this.currentTime = row.Time;
+                currentTime = row.Time;
             }
         }));
     }
@@ -38,14 +48,44 @@ public class Processor
     public List<Tuple<string, double>> RecentRainfallAvgs()
     {
         var lst = new List<Tuple<string, double>>();
-        var cutoff = this.currentTime.AddHours(-4);
-        foreach (var key in this.dict.Keys)
+        foreach (var key in dict.Keys)
         {
-            var data = this.OnlyDataAfter(this.dict[key], cutoff).Select(row => row.Rainfall).ToList();
+            var data = OnlyDataAfter(this.dict[key], cutoff).Select(row => row.Rainfall).ToList();
             lst.Add(new Tuple<string, double>(key, Avg(data)));
         }
         return lst;
     }
+
+    private void CalculateRecentRainfallAvgs()
+    {
+        var avgs = RecentRainfallAvgs();
+        avgs.ForEach(tup => processedData[tup.Item1].Avg = tup.Item2);
+    }
+
+    private void DetermineClassifications()
+    {
+        foreach (var key in dict.Keys)
+        {
+            processedData[key].Classification = Classify(dict[key]);
+        }
+    }
+
+    private Classification Classify(List<RainfallData> data)
+    {
+        return Classify(OnlyDataAfter(data, cutoff).Select(row => row.Rainfall).ToList());
+    }
+
+    private Classification Classify(List<int> lst)
+    {
+        var avg = Avg(lst);
+        if (lst.FindIndex(n => n > 30) >= 0 || avg >= 15)
+        {
+            return Classification.RED;
+        }
+        else if (avg >= 10) return Classification.AMBER;
+        else return Classification.GREEN;
+    }
+
 
     private List<RainfallData> OnlyDataAfter(List<RainfallData> lst, DateTime cutoff)
     {
