@@ -17,6 +17,6 @@ var sorted_data = HelperService.Helper.SortIntoDictionary(device_data, rainfall_
 
 // Printer.PrintDictionary(sorted_data);
 var processor = new Processor(sorted_data);
-var recent_avgs = processor.RecentRainfallAvgs();
-recent_avgs.ForEach(tup => Console.WriteLine("{0} has avg reading of {1} in the last 4 hours", tup.Item1, tup.Item2));
+Printer.Print(processor.processedData);
+
 
