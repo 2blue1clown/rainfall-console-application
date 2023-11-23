@@ -15,7 +15,7 @@ public class OutputData : IId
 
     public override string ToString()
     {
-        return string.Format("Device Id: {0} Classification: {1} Avg Reading in Last 4 Hours: {2} Trend: {3}", Id, Classification.ToString(), Avg, Trend.ToString());
+        return string.Format("Device Id: {0}\nClassification: {1}\nAvg Reading in Last 4 Hours: {2}\nTrend: {3}\n\n", Id, Classification.ToString(), Avg, Trend.ToString());
     }
 
 }
