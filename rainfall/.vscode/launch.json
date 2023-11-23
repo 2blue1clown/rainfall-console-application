@@ -8,7 +8,7 @@
             "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "dotnet: build",
             "program": "${workspaceFolder}/Console/bin/Debug/net8.0/Console.dll",
             "args": [
                 "C:\\Users\\61421\\Documents\\webdev-2023\\rainfall\\data\\Devices.csv",

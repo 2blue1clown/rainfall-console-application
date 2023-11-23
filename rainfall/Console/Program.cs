@@ -10,7 +10,6 @@ if (args.Length < 2)
     throw new Exception("Not enough args");
 }
 
-Console.WriteLine("Testing that building still works");
 
 
 var device_path = args[0];
