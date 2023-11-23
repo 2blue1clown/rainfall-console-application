@@ -3,8 +3,18 @@
 using CoreService;
 using CoreService.Models;
 
-var device_path = "C:\\Users\\61421\\Documents\\webdev-2023\\rainfall\\data\\Devices.csv";
-var data_folder = "C:\\Users\\61421\\Documents\\webdev-2023\\rainfall\\data";
+if (args.Length < 2)
+{
+    Console.WriteLine("Please supply the correct number of arguments");
+    Console.WriteLine("rainfall <path_to_device_data> <path_to_folder_of_rainfall_data>");
+    throw new Exception("Not enough args");
+}
+
+Console.WriteLine("Testing that building still works");
+
+
+var device_path = args[0];
+var data_folder = args[1];
 
 List<RainfallData> rainfall_data = new();
 List<DeviceData> device_data = new();
