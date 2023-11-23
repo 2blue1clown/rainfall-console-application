@@ -7,12 +7,13 @@ namespace CoreService;
 
 public class Processor
 {
-    Dictionary<string, List<RainfallData>> dict;
+    Dictionary<string, List<RainfallData>> dict = [];
     DateTime currentTime;
     DateTime cutoff;
 
     public Dictionary<string, OutputData> outputData = [];
 
+    public Processor() { }
     public Processor(Dictionary<string, List<RainfallData>> dict)
     {
         this.dict = dict;
@@ -22,7 +23,7 @@ public class Processor
         }
         SetCurrentTime();
         cutoff = currentTime.AddHours(-4);
-        CalculateRecentRainfallAvgs();
+        DetermineRecentRainfallAvgs();
         DetermineClassifications();
         DetermineTrends();
     }
@@ -40,28 +41,24 @@ public class Processor
         }));
     }
 
-    private static double Avg(List<int> data)
+    public double Avg(List<double> data)
     {
         double total = 0;
         data.ForEach(num => total += num);
         return total / data.Count;
     }
-
-    public List<Tuple<string, double>> RecentRainfallAvgs()
+    public double RecentRainfallAvg(List<RainfallData> lst)
     {
-        var lst = new List<Tuple<string, double>>();
-        foreach (var key in dict.Keys)
-        {
-            var data = OnlyDataAfter(this.dict[key], cutoff).Select(row => row.Rainfall).ToList();
-            lst.Add(new Tuple<string, double>(key, Avg(data)));
-        }
-        return lst;
+        var data = OnlyDataAfter(lst, cutoff).Select(row => row.Rainfall).ToList();
+        return Avg(data);
     }
 
-    private void CalculateRecentRainfallAvgs()
+    private void DetermineRecentRainfallAvgs()
     {
-        var avgs = RecentRainfallAvgs();
-        avgs.ForEach(tup => outputData[tup.Item1].Avg = tup.Item2);
+        foreach (var key in dict.Keys)
+        {
+            outputData[key].Avg = RecentRainfallAvg(dict[key]);
+        }
     }
 
     private void DetermineClassifications()
@@ -77,7 +74,7 @@ public class Processor
         return Classify(OnlyDataAfter(data, cutoff).Select(row => row.Rainfall).ToList());
     }
 
-    private Classification Classify(List<int> lst)
+    public Classification Classify(List<double> lst)
     {
         var avg = Avg(lst);
         if (lst.FindIndex(n => n > 30) >= 0 || avg >= 15)
@@ -98,17 +95,17 @@ public class Processor
     {
         foreach (var key in dict.Keys)
         {
-            outputData[key].Trend = DetermineTrend(dict[key]);
+            outputData[key].Trend = DetermineTrend(dict[key].Select(row => (double)row.Rainfall).ToList());
         }
     }
-    private Trend DetermineTrend(List<RainfallData> lst)
+    public Trend DetermineTrend(List<double> lst)
     {
         var xVals = new List<double>();
         for (int i = 0; i < lst.Count; i++)
         {
             xVals.Add(i);
         }
-        var slope = Slope(xVals, lst.Select(row => (double)row.Rainfall).ToList());
+        var slope = Slope(xVals, lst);
 
         if (slope > 0) return Trend.INCREASING;
         else if (slope == 0) return Trend.FLAT;
@@ -117,6 +114,12 @@ public class Processor
 
     }
 
+    /// <summary>
+    /// Found method from the internet because I do not know how to calculate a linear regression
+    /// </summary>
+    /// <param name="xVals"></param>
+    /// <param name="yVals"></param>
+    /// <returns></returns>
     private static double Slope(List<double> xVals, List<double> yVals)
 
     {

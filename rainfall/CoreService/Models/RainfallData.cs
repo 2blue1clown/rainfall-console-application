@@ -12,7 +12,7 @@ public class RainfallData : IId
     public DateTime Time { get; set; }
     [Index(2)]
 
-    public int Rainfall { get; set; }
+    public double Rainfall { get; set; }
 
     public override string ToString()
     {
