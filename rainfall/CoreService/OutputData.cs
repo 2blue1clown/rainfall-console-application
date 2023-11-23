@@ -1,5 +1,7 @@
 
-namespace CoreService.Models.OutputData;
+using CoreService.Models;
+
+namespace CoreService;
 
 public enum Classification { GREEN, RED, AMBER }
 public enum Trend { INCREASING, DECREASING, FLAT }

@@ -1,7 +1,7 @@
 ﻿
 using System.Diagnostics;
-using CoreService.Models.OutputData;
-using CoreService.Models.RainfallData;
+using CoreService.Models;
+using CoreService;
 
 namespace CoreService;
 
@@ -11,7 +11,7 @@ public class Processor
     DateTime currentTime;
     DateTime cutoff;
 
-    public Dictionary<string, OutputData> outputData = new();
+    public Dictionary<string, OutputData> outputData = [];
 
     public Processor(Dictionary<string, List<RainfallData>> dict)
     {
@@ -117,16 +117,6 @@ public class Processor
 
     }
 
-    /// <summary>
-    /// Taken from https://stackoverflow.com/questions/15623129/simple-linear-regression-for-data-set
-    /// </summary>
-    /// <param name="xVals"></param>
-    /// <param name="yVals"></param>
-    /// <param name="inclusiveStart"></param>
-    /// <param name="exclusiveEnd"></param>
-    /// <param name="rsquared"></param>
-    /// <param name="yintercept"></param>
-    /// <param name="slope"></param>
     private static double Slope(List<double> xVals, List<double> yVals)
 
     {

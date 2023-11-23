@@ -1,7 +1,7 @@
 
 using CsvHelper.Configuration.Attributes;
 
-namespace CoreService.Models.RainfallData;
+namespace CoreService.Models;
 
 public class RainfallData : IId
 {
