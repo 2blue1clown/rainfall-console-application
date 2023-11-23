@@ -10,8 +10,6 @@ if (args.Length < 2)
     throw new Exception("Not enough args");
 }
 
-
-
 var device_path = args[0];
 var data_folder = args[1];
 
