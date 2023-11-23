@@ -1,4 +1,5 @@
 ﻿
+using System.Diagnostics;
 using CoreService.Models.OutputData;
 using CoreService.Models.RainfallData;
 
@@ -23,6 +24,7 @@ public class Processor
         cutoff = currentTime.AddHours(-4);
         CalculateRecentRainfallAvgs();
         DetermineClassifications();
+        DetermineTrends();
     }
 
     private void setCurrentTime()
@@ -92,5 +94,71 @@ public class Processor
         return lst.Where(row => DateTime.Compare(cutoff, row.Time) < 0).ToList();
     }
 
+    private void DetermineTrends()
+    {
+        foreach (var key in dict.Keys)
+        {
+            processedData[key].Trend = DetermineTrend(dict[key]);
+        }
+    }
+    private Trend DetermineTrend(List<RainfallData> lst)
+    {
+        var xVals = new List<double>();
+        for (int i = 0; i < lst.Count; i++)
+        {
+            xVals.Add(i);
+        }
+        var slope = Slope(xVals, lst.Select(row => (double)row.Rainfall).ToList());
+
+        if (slope > 0) return Trend.INCREASING;
+        else if (slope == 0) return Trend.FLAT;
+        else return Trend.DECREASING;
+
+
+    }
+
+    /// <summary>
+    /// Taken from https://stackoverflow.com/questions/15623129/simple-linear-regression-for-data-set
+    /// </summary>
+    /// <param name="xVals"></param>
+    /// <param name="yVals"></param>
+    /// <param name="inclusiveStart"></param>
+    /// <param name="exclusiveEnd"></param>
+    /// <param name="rsquared"></param>
+    /// <param name="yintercept"></param>
+    /// <param name="slope"></param>
+    private static double Slope(List<double> xVals, List<double> yVals)
+
+    {
+
+        Debug.Assert(xVals.Count == yVals.Count);
+
+        double sumOfX = 0;
+        double sumOfY = 0;
+        double sumOfXSq = 0;
+        double sumOfYSq = 0;
+        double ssX = 0;
+        double ssY = 0;
+        double sumCodeviates = 0;
+        double sCo = 0;
+
+        for (int i = 0; i < yVals.Count; i++)
+        {
+            double x = xVals[i];
+            double y = yVals[i];
+            sumCodeviates += x * y;
+            sumOfX += x;
+            sumOfY += y;
+            sumOfXSq += x * x;
+            sumOfYSq += y * y;
+        }
+        ssX = sumOfXSq - ((sumOfX * sumOfX) / yVals.Count);
+        ssY = sumOfYSq - ((sumOfY * sumOfY) / yVals.Count);
+
+        sCo = sumCodeviates - ((sumOfX * sumOfY) / yVals.Count);
+
+
+        return sCo / ssX;
+    }
 
 }
