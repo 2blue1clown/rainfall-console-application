@@ -8,6 +8,7 @@ public class DataReader
 {
     public static IEnumerable<T> LoadFileData<T>(string path)
     {
+        Console.WriteLine("Attempting to load file data from {0}", path);
         var data = ExecuteWithLogging(() =>
         {
             using (var reader = new StreamReader(path))
@@ -15,6 +16,7 @@ public class DataReader
             {
                 // read device data and prepare for sorting of data
                 var data = csv.GetRecords<T>().ToList();
+                Console.WriteLine("Successfully loaded file data");
                 return data;
             }
         });
@@ -23,12 +25,14 @@ public class DataReader
 
     public static IEnumerable<T> LoadFolderData<T>(string path)
     {
+        Console.WriteLine("Attempting to load folder data from {0}", path);
         var collection = Enumerable.Empty<T>();
         var files = GetFiles(path);
         foreach (string file in files)
         {
             collection = collection.Concat(LoadFileData<T>(file));
         }
+        Console.WriteLine("Successfully loaded folder", path);
         return collection;
     }
 
