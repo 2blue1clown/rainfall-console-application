@@ -10,9 +10,9 @@ While improving my solution I explored using:
 ## The Problem: Fuzion Inc. Manages a flood detection programme. 
 They have devices in the field that take rainfall readings which are sent to main office via ftp as a .csv file.
 They would like a simple console UI that reads in the rainfall readings from a folder and shows the average rainfall over the last 4 hours for each device, whether it is green, amber or red, and whether the average rainfall trend is increasing or decreasing. The thresholds being:
-Green: average rainfall for last 4 hrs < 10mm
-Amber: average rainfall for last 4 hrs < 15mm
-Red: average rainfall for last 4 hrs >= 15mm or any reading in the last 4 hrs > 30mm
+- Green: average rainfall for last 4 hrs < 10mm
+- Amber: average rainfall for last 4 hrs < 15mm
+- Red: average rainfall for last 4 hrs >= 15mm or any reading in the last 4 hrs > 30mm
 ### Data:
 You are provided with: 
 1. The list of devices (csv)
