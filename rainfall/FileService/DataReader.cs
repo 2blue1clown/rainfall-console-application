@@ -9,10 +9,11 @@ public class DataReader
     public static IEnumerable<T> LoadFileData<T>(string path)
     {
         Console.WriteLine("Attempting to load file data from {0}", path);
+
         var data = ExecuteWithLogging(() =>
         {
             using (var reader = new StreamReader(path))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            using (var csv = new CsvReader(reader, CultureInfo.GetCultureInfo("en-AU")))
             {
                 // read device data and prepare for sorting of data
                 var data = csv.GetRecords<T>().ToList();
