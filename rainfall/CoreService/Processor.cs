@@ -27,7 +27,6 @@ public class Processor
                    where row.Time > currentTime.AddHours(-4)
                    select row;
         }
-
     }
 
     private IEnumerable<IGrouping<string, RainfallData>>? groupedRecentRainfallData
@@ -44,30 +43,59 @@ public class Processor
             return from row in rainfallData group row by row.Id into idGroup select idGroup;
         }
     }
-
-    public IEnumerable<ReportData> reportData
+    public Dictionary<string, double> Averages
     {
         get
         {
-            var averages = from g in groupedRecentRainfallData
-                           select new { Id = g.Key, Average = g.Average(row => row.Rainfall) };
+            var averages = new Dictionary<string, double>();
+            foreach (var g in groupedRecentRainfallData)
+            {
+                averages.Add(g.Key, g.Select(row => row.Rainfall).Average());
+            }
+            return averages;
+        }
+    }
+    public Dictionary<string, Classification> Classifications
+    {
+        get
+        {
+            var classifications = new Dictionary<string, Classification>();
+            foreach (var g in groupedRecentRainfallData)
+            {
+                classifications.Add(g.Key, Classify(g.Select(row => row.Rainfall)));
+            }
+            return classifications;
+        }
+    }
+    public Dictionary<string, Trend> Trends
+    {
+        get
+        {
+            var Trends = new Dictionary<string, Trend>();
+            foreach (var g in groupedRainfallData)
+            {
+                Trends.Add(g.Key, DetermineTrend(g.Select(row => row.Rainfall)));
+            }
+            return Trends;
+        }
+    }
 
-            var classifications = from g in groupedRecentRainfallData
-                                  select new { Id = g.Key, Classification = Classify(g.Select(row => row.Rainfall)) };
-
-            var trends = from g in groupedRainfallData
-                         select new { Id = g.Key, Trend = DetermineTrend(g.Select(row => row.Rainfall)) };
-
-            return from average in averages
-                   join classification in classifications on average.Id equals classification.Id
-                   join trend in trends on average.Id equals trend.Id
-                   select new ReportData()
-                   {
-                       Id = average.Id,
-                       Avg = average.Average,
-                       Trend = trend.Trend,
-                       Classification = classification.Classification
-                   };
+    public List<ReportData> reportData
+    {
+        get
+        {
+            var data = new List<ReportData>();
+            foreach (var key in Averages.Keys)
+            {
+                data.Add(new ReportData()
+                {
+                    Id = key,
+                    Avg = Averages[key],
+                    Classification = Classifications[key],
+                    Trend = Trends[key]
+                });
+            }
+            return data;
         }
     }
 

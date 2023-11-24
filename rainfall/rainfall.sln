@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileService", "FileService\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreService", "CoreService\CoreService.csproj", "{473C8F20-03C3-4562-B3AC-C56A02FEE5EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperService", "HelperService\HelperService.csproj", "{62AE44AE-3EA6-4431-A7D6-105889D43F04}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreServiceTests", "CoreServiceTests\CoreServiceTests.csproj", "{16BAF326-FE9D-46FF-BA9A-B10E1681827C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServiceTests", "FileServiceTests\FileServiceTests.csproj", "{C251C306-E541-448C-B011-9FE6F095A232}"
