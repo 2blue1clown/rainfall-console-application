@@ -3,6 +3,7 @@
 using CoreService;
 using CoreService.Models;
 
+
 if (args.Length < 2)
 {
     Console.WriteLine("Please supply the correct number of arguments");

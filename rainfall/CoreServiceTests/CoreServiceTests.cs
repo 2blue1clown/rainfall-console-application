@@ -5,11 +5,13 @@ namespace CoreServiceTests;
 
 public class CoreService_Should
 {
+    private string relativePathPrefix = "..\\..\\..\\..\\";
 
     [Theory]
-    [InlineData(new[] { 2020, 6, 5, 11, 30, 0 }, "C:\\Users\\61421\\Documents\\webdev-2023\\rainfall\\testData\\Data1.csv")]
-    public void IdentifyCurrentTime(int[] expected, string path)
+    [InlineData(new[] { 2020, 6, 5, 11, 30, 0 }, "..\\testData\\Data1.csv")]
+    public void IdentifyCurrentTime(int[] expected, string relativePath)
     {
+        var path = Path.Combine(Directory.GetCurrentDirectory(), relativePathPrefix, relativePath);
         var expectedTime = new DateTime(expected[0], expected[1], expected[2], expected[3], expected[4], expected[5]);
         var rainfallData = FileService.DataReader.LoadFileData<RainfallData>(path);
         var p = new Processor(rainfallData, Enumerable.Empty<DeviceData>());
