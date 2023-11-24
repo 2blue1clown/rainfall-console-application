@@ -1,7 +1,5 @@
 ﻿
-using System.Diagnostics;
 using CoreService.Models;
-using CoreService;
 
 namespace CoreService;
 
@@ -10,9 +8,7 @@ public class Processor
     IEnumerable<RainfallData> rainfallData;
     IEnumerable<DeviceData> deviceData;
     public DateTime currentTime;
-    DateTime cutoff;
 
-    public Dictionary<string, ReportData> reportData = [];
 
     public Processor() { }
 
@@ -20,93 +16,96 @@ public class Processor
     {
         this.rainfallData = rainfallData;
         this.deviceData = deviceData;
-        SetCurrentTime();
+        currentTime = this.rainfallData.Max(row => row.Time);
     }
 
-
-    private void SetCurrentTime()
+    private IEnumerable<RainfallData> recentRainfallData
     {
-        currentTime = rainfallData.Max(row => row.Time);
+        get
+        {
+            return from row in rainfallData
+                   where row.Time > currentTime.AddHours(-4)
+                   select row;
+        }
+
     }
 
-    public double RecentRainfallAvg(List<RainfallData> lst)
+    private IEnumerable<IGrouping<string, RainfallData>>? groupedRecentRainfallData
     {
-        var data = OnlyDataAfter(lst, cutoff).Select(row => row.Rainfall).ToList();
-        return data.Average();
+        get
+        {
+            return from row in recentRainfallData group row by row.Id into idGroup select idGroup;
+        }
+    }
+    private IEnumerable<IGrouping<string, RainfallData>>? groupedRainfallData
+    {
+        get
+        {
+            return from row in rainfallData group row by row.Id into idGroup select idGroup;
+        }
     }
 
-    private void DetermineRecentRainfallAvgs()
+    public IEnumerable<ReportData> reportData
     {
-        // foreach (var key in dict.Keys)
-        // {
-        //     ReportData[key].Avg = RecentRainfallAvg(dict[key]);
-        // }
+        get
+        {
+            var averages = from g in groupedRecentRainfallData
+                           select new { Id = g.Key, Average = g.Average(row => row.Rainfall) };
+
+            var classifications = from g in groupedRecentRainfallData
+                                  select new { Id = g.Key, Classification = Classify(g.Select(row => row.Rainfall)) };
+
+            var trends = from g in groupedRainfallData
+                         select new { Id = g.Key, Trend = DetermineTrend(g.Select(row => row.Rainfall)) };
+
+            return from average in averages
+                   join classification in classifications on average.Id equals classification.Id
+                   join trend in trends on average.Id equals trend.Id
+                   select new ReportData()
+                   {
+                       Id = average.Id,
+                       Avg = average.Average,
+                       Trend = trend.Trend,
+                       Classification = classification.Classification
+                   };
+        }
     }
 
-    private void DetermineClassifications()
+    public Classification Classify(IEnumerable<double> data)
     {
-        // foreach (var key in dict.Keys)
-        // {
-        //     ReportData[key].Classification = Classify(dict[key]);
-        // }
-    }
-
-    private Classification Classify(List<RainfallData> data)
-    {
-        return Classify(OnlyDataAfter(data, cutoff).Select(row => row.Rainfall).ToList());
-    }
-
-    public Classification Classify(List<double> lst)
-    {
-        var avg = lst.Average();
-        if (lst.FindIndex(n => n > 30) >= 0 || avg >= 15)
+        if (data.Any(n => n > 30) || data.Average() >= 15)
         {
             return Classification.RED;
         }
-        else if (avg >= 10) return Classification.AMBER;
+        else if (data.Average() >= 10) return Classification.AMBER;
         else return Classification.GREEN;
     }
 
+    public Trend DetermineTrend(IEnumerable<double> data)
+    {
 
-    private List<RainfallData> OnlyDataAfter(List<RainfallData> lst, DateTime cutoff)
-    {
-        return lst.Where(row => DateTime.Compare(cutoff, row.Time) < 0).ToList();
-    }
+        var xValues = Enumerable.Range(0, data.Count()).Select(n => (double)n);
+        var trendData = xValues.Zip(data).Select(coord => new Coord() { X = coord.First, Y = coord.Second });
 
-    private void DetermineTrends()
-    {
-        // foreach (var key in dict.Keys)
-        // {
-        //     ReportData[key].Trend = DetermineTrend(dict[key].Select(row => (double)row.Rainfall).ToList());
-        // }
-    }
-    public Trend DetermineTrend(List<double> lst)
-    {
-        var xVals = new List<double>();
-        for (int i = 0; i < lst.Count; i++)
-        {
-            xVals.Add(i);
-        }
-        var slope = Slope(xVals, lst);
+        var slope = Slope(trendData);
 
         if (slope > 0) return Trend.INCREASING;
         else if (slope == 0) return Trend.FLAT;
         else return Trend.DECREASING;
-
-
     }
-
+    private struct Coord
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
+    }
     /// <summary>
     /// Found method from the internet because I do not know how to calculate a linear regression
     /// </summary>
-    /// <param name="xVals"></param>
+    /// <param name="xValues"></param>
     /// <param name="yVals"></param>
     /// <returns></returns>
-    private static double Slope(List<double> xVals, List<double> yVals)
-
+    private static double Slope(IEnumerable<Coord> data)
     {
-
-        Debug.Assert(xVals.Count == yVals.Count);
 
         double sumOfX = 0;
         double sumOfY = 0;
@@ -117,22 +116,20 @@ public class Processor
         double sumCodeviates = 0;
         double sCo = 0;
 
-        for (int i = 0; i < yVals.Count; i++)
+        foreach (var coord in data)
         {
-            double x = xVals[i];
-            double y = yVals[i];
+            double x = coord.X;
+            double y = coord.Y;
             sumCodeviates += x * y;
             sumOfX += x;
             sumOfY += y;
             sumOfXSq += x * x;
             sumOfYSq += y * y;
         }
-        ssX = sumOfXSq - ((sumOfX * sumOfX) / yVals.Count);
-        ssY = sumOfYSq - ((sumOfY * sumOfY) / yVals.Count);
+        ssX = sumOfXSq - ((sumOfX * sumOfX) / data.Count());
+        ssY = sumOfYSq - ((sumOfY * sumOfY) / data.Count());
 
-        sCo = sumCodeviates - ((sumOfX * sumOfY) / yVals.Count);
-
-
+        sCo = sumCodeviates - ((sumOfX * sumOfY) / data.Count());
         return sCo / ssX;
     }
 

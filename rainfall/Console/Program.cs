@@ -28,16 +28,13 @@ if (rainfall_data.Count() == 0)
     Environment.Exit(1);
 }
 
-
-
 // Printer.PrintDictionary(sorted_data);
 var processor = new Processor(rainfall_data, device_data);
-Printer.Print(processor.reportData);
+Console.WriteLine();
+foreach (var report in processor.reportData)
+{
+    Console.WriteLine(report);
+}
 
-// catch (KeyNotFoundException e)
-// {
-//     Console.WriteLine("ERROR: Found rainfall data with id not in devices file.\nPlease update devices file to include device '{0}'", e.Message);
-//     Environment.Exit(1);
-// }
 
 
