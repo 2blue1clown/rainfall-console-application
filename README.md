@@ -24,14 +24,14 @@ design over complexity of what the application can do.
 # Feedback
 Here is the feedback I recieved for my abysmal first attempt. I have tried to fix this in this attempt.
 
-There's no real structure
-Very limited use of classes
-Only 1 function defined, and is not actually used as he ran out of time.
-A lack of consistency with coding style - makes it harder to read then it should be considering how simple it is.
-Also breaks a lot of standard coding conventions, which can be trained out.
-No error checking - the slightest bit of invalid input makes it crash.
-Logic bug - instead of calculating average rainfall, calc's rainfall per hour and called it an average.
-No tests
-Had a small attempt at the trend, but didn't seem to get very far.
-Output is ok, a little bare bones.
-Technical knowledge seems ok, but could do with some training.
+- There's no real structure
+- Very limited use of classes
+- Only 1 function defined, and is not actually used as he ran out of time.
+- A lack of consistency with coding style - makes it harder to read then it should be considering how simple it is.
+- Also breaks a lot of standard coding conventions, which can be trained out.
+- No error checking - the slightest bit of invalid input makes it crash.
+- Logic bug - instead of calculating average rainfall, calc's rainfall per hour and called it an average.
+- No tests
+- Had a small attempt at the trend, but didn't seem to get very far.
+- Output is ok, a little bare bones.
+- Technical knowledge seems ok, but could do with some training.
