@@ -14,9 +14,44 @@ public class Processor
 
     public Processor(IEnumerable<RainfallData> rainfallData, IEnumerable<DeviceData> deviceData)
     {
-        this.rainfallData = rainfallData;
-        this.deviceData = deviceData;
+        this.rainfallData = rainfallData.Where(r => r.Id.Length > 0);
+        this.deviceData = deviceData.Where(d => d.Id.Length > 0);
         currentTime = this.rainfallData.Max(row => row.Time);
+        CheckData();
+
+    }
+
+    private void CheckData()
+    {
+        if (deviceData.DistinctBy(d => d.Id).Count() != deviceData.Count())
+        {
+            Console.WriteLine("WARNING: There are duplicate ids in devices. Removing duplicates and proceeding\n");
+            deviceData = deviceData.DistinctBy(d => d.Id);
+        }
+
+        var rainfallIdsNotInDevices = rainfallData.Select(r => r.Id).Except(deviceData.Select(d => d.Id));
+        var deviceIdsNotInRainfall = deviceData.Select(d => d.Id).Except(rainfallData.Select(r => r.Id));
+        if (rainfallIdsNotInDevices.Any())
+        {
+            Console.WriteLine("WARNING: Rainfall data includes the following ids not in given devices data. They will be removed.");
+            foreach (var id in rainfallIdsNotInDevices)
+            {
+                Console.WriteLine(id);
+                Console.WriteLine();
+
+            }
+            rainfallData = rainfallData.Where(r => !rainfallIdsNotInDevices.Contains(r.Id));
+        }
+        if (deviceIdsNotInRainfall.Any())
+        {
+            Console.WriteLine("WARNING: Devices data includes the following devices than in rainfall data");
+            foreach (var id in deviceIdsNotInRainfall)
+            {
+                Console.WriteLine(id);
+                Console.WriteLine();
+            }
+        }
+
     }
 
     private IEnumerable<RainfallData> recentRainfallData
@@ -84,6 +119,7 @@ public class Processor
     {
         get
         {
+            var devices = deviceData.ToDictionary(row => row.Id);
             var data = new List<ReportData>();
             foreach (var key in Averages.Keys)
             {
@@ -92,7 +128,9 @@ public class Processor
                     Id = key,
                     Avg = Averages[key],
                     Classification = Classifications[key],
-                    Trend = Trends[key]
+                    Trend = Trends[key],
+                    Name = devices[key].Name,
+                    Location = devices[key].Location
                 });
             }
             return data;
@@ -127,7 +165,7 @@ public class Processor
         public double Y { get; set; }
     }
     /// <summary>
-    /// Found method from the internet because I do not know how to calculate a linear regression
+    /// Found most of method from the internet because I do not know how to calculate a linear regression
     /// </summary>
     /// <param name="xValues"></param>
     /// <param name="yVals"></param>
