@@ -29,8 +29,8 @@ if (rainfall_data.Count() == 0)
 }
 
 // Printer.PrintDictionary(sorted_data);
-var processor = new Processor(rainfall_data, device_data);
 Console.WriteLine();
+var processor = new Processor(rainfall_data, device_data);
 foreach (var report in processor.reportData)
 {
     Console.WriteLine(report);
