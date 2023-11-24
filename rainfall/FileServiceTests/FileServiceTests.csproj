@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FileService\FileService.csproj" />
+    <ProjectReference Include="..\CoreService\CoreService.csproj" />
   </ItemGroup>
 
 </Project>
