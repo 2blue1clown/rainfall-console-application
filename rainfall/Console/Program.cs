@@ -13,35 +13,31 @@ if (args.Length < 2)
 var device_path = args[0];
 var data_folder = args[1];
 
-List<RainfallData> rainfall_data = new();
-List<DeviceData> device_data = new();
+var rainfall_data = FileService.DataReader.LoadFolderData<RainfallData>(data_folder);
+var device_data = FileService.DataReader.LoadFileData<DeviceData>(device_path);
 
-FileService.DataReader.LoadFolderDataToList(data_folder, rainfall_data);
-FileService.DataReader.LoadFileDataToList(device_path, device_data);
-
-if (device_data.Count == 0)
+if (device_data.Count() == 0)
 {
     Console.WriteLine("ERROR: No devices provided in the devices data file");
     Environment.Exit(1);
 }
 
-if (rainfall_data.Count == 0)
+if (rainfall_data.Count() == 0)
 {
     Console.WriteLine("ERROR: No valid rainfall data provided in folder");
     Environment.Exit(1);
 }
 
-try
-{
-    var sorted_data = HelperService.Helper.SortIntoDictionary(device_data, rainfall_data);
-    // Printer.PrintDictionary(sorted_data);
-    var processor = new Processor(sorted_data);
-    Printer.Print(processor.outputData);
-}
-catch (KeyNotFoundException e)
-{
-    Console.WriteLine("ERROR: Found rainfall data with id not in devices file.\nPlease update devices file to include device '{0}'", e.Message);
-    Environment.Exit(1);
-}
+
+
+// Printer.PrintDictionary(sorted_data);
+var processor = new Processor(rainfall_data, device_data);
+Printer.Print(processor.reportData);
+
+// catch (KeyNotFoundException e)
+// {
+//     Console.WriteLine("ERROR: Found rainfall data with id not in devices file.\nPlease update devices file to include device '{0}'", e.Message);
+//     Environment.Exit(1);
+// }
 
 

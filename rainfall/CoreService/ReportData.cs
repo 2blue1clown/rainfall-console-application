@@ -7,7 +7,7 @@ public enum Classification { GREEN, RED, AMBER }
 public enum Trend { INCREASING, DECREASING, FLAT }
 
 
-public class OutputData : IId
+public class ReportData : IId
 {
     public string Id { get; set; }
     public double Avg { get; set; }

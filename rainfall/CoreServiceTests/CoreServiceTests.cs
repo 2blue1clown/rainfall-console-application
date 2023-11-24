@@ -1,17 +1,19 @@
 using CoreService;
+using CoreService.Models;
 
 namespace CoreServiceTests;
 
 public class CoreService_Should
 {
+
     [Theory]
-    [InlineData(2, new[] { 1.0, 2, 3 })]
-    [InlineData(1.5, new[] { 1.0, 2 })]
-    [InlineData(double.NaN, new double[0])]
-    public void CalculateAvg(double result, double[] input)
+    [InlineData(new[] { 2020, 5, 6, 11, 30, 0 }, "C:\\Users\\61421\\Documents\\webdev-2023\\rainfall\\testData\\Data1.csv")]
+    public void IdentifyCurrentTime(int[] expected, string path)
     {
-        var p = new Processor();
-        Assert.Equal(result, p.Avg(input.ToList()));
+        var expectedTime = new DateTime(expected[0], expected[1], expected[2], expected[3], expected[4], expected[5]);
+        var rainfallData = FileService.DataReader.LoadFileData<RainfallData>(path);
+        var p = new Processor(rainfallData, Enumerable.Empty<DeviceData>());
+        Assert.Equal(p.currentTime, expectedTime);
     }
 
     [Theory]

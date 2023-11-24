@@ -7,66 +7,48 @@ namespace CoreService;
 
 public class Processor
 {
-    Dictionary<string, List<RainfallData>> dict = [];
-    DateTime currentTime;
+    IEnumerable<RainfallData> rainfallData;
+    IEnumerable<DeviceData> deviceData;
+    public DateTime currentTime;
     DateTime cutoff;
 
-    public Dictionary<string, OutputData> outputData = [];
+    public Dictionary<string, ReportData> reportData = [];
 
     public Processor() { }
-    public Processor(Dictionary<string, List<RainfallData>> dict)
+
+    public Processor(IEnumerable<RainfallData> rainfallData, IEnumerable<DeviceData> deviceData)
     {
-        this.dict = dict;
-        foreach (var key in dict.Keys)
-        {
-            outputData.Add(key, new OutputData() { Id = key });
-        }
+        this.rainfallData = rainfallData;
+        this.deviceData = deviceData;
         SetCurrentTime();
-        cutoff = currentTime.AddHours(-4);
-        DetermineRecentRainfallAvgs();
-        DetermineClassifications();
-        DetermineTrends();
     }
+
 
     private void SetCurrentTime()
     {
-        var data = dict.Values.ToList();
-        this.currentTime = DateTime.MinValue;
-        data.ForEach(subData => subData.ForEach(row =>
-        {
-            if (DateTime.Compare(currentTime, row.Time) < 0)
-            {
-                currentTime = row.Time;
-            }
-        }));
+        currentTime = rainfallData.Max(row => row.Time);
     }
 
-    public double Avg(List<double> data)
-    {
-        double total = 0;
-        data.ForEach(num => total += num);
-        return total / data.Count;
-    }
     public double RecentRainfallAvg(List<RainfallData> lst)
     {
         var data = OnlyDataAfter(lst, cutoff).Select(row => row.Rainfall).ToList();
-        return Avg(data);
+        return data.Average();
     }
 
     private void DetermineRecentRainfallAvgs()
     {
-        foreach (var key in dict.Keys)
-        {
-            outputData[key].Avg = RecentRainfallAvg(dict[key]);
-        }
+        // foreach (var key in dict.Keys)
+        // {
+        //     ReportData[key].Avg = RecentRainfallAvg(dict[key]);
+        // }
     }
 
     private void DetermineClassifications()
     {
-        foreach (var key in dict.Keys)
-        {
-            outputData[key].Classification = Classify(dict[key]);
-        }
+        // foreach (var key in dict.Keys)
+        // {
+        //     ReportData[key].Classification = Classify(dict[key]);
+        // }
     }
 
     private Classification Classify(List<RainfallData> data)
@@ -76,7 +58,7 @@ public class Processor
 
     public Classification Classify(List<double> lst)
     {
-        var avg = Avg(lst);
+        var avg = lst.Average();
         if (lst.FindIndex(n => n > 30) >= 0 || avg >= 15)
         {
             return Classification.RED;
@@ -93,10 +75,10 @@ public class Processor
 
     private void DetermineTrends()
     {
-        foreach (var key in dict.Keys)
-        {
-            outputData[key].Trend = DetermineTrend(dict[key].Select(row => (double)row.Rainfall).ToList());
-        }
+        // foreach (var key in dict.Keys)
+        // {
+        //     ReportData[key].Trend = DetermineTrend(dict[key].Select(row => (double)row.Rainfall).ToList());
+        // }
     }
     public Trend DetermineTrend(List<double> lst)
     {
