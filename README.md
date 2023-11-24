@@ -1,19 +1,22 @@
 # rainfall-console-application
-A console application that takes in data from a folder of "Rainfall Data" and a "Device Data" file. It then takes some averages and determines an average trend.
+A .NET console application that takes in data from a folder then determines some averages and an average trend.
+The breif for this project is below. It was given to me as a coding interview in which I did a terrible job. This repo is a better version where I try to fix my earlier mistakes.
+While improving my solution I explored using:
+- mulitple projects in a solution
+- LINQ
+- File IO
 
-The breif for this project is below. It was given to me as a coding interview in which I did a terrible job. This repo is a better version where I try to fix my earlier mistakes.  
-
-# The Problem: Fuzion Inc. Manages a flood detection programme. 
+## The Problem: Fuzion Inc. Manages a flood detection programme. 
 They have devices in the field that take rainfall readings which are sent to main office via ftp as a .csv file.
 They would like a simple console UI that reads in the rainfall readings from a folder and shows the average rainfall over the last 4 hours for each device, whether it is green, amber or red, and whether the average rainfall trend is increasing or decreasing. The thresholds being:
 Green: average rainfall for last 4 hrs < 10mm
 Amber: average rainfall for last 4 hrs < 15mm
 Red: average rainfall for last 4 hrs >= 15mm or any reading in the last 4 hrs > 30mm
-## Data:
+### Data:
 You are provided with:  The list of devices (csv)  The last 2 sets of data files received (csv)
 For the purpose of development & testing assume that the last timestamp across all data files is the current time, so if the last time in all data files is 3pm, assume the current time is 3pm
 
-## Solution requirements
+### Solution requirements
 The solution should be written in C# although if you only have java / javascript skills we’ll take either of these. The
 solution should use no external libraries. There is one exception - you may use your choice of CSV reader. There are a few available. Our suggestion is https://joshclose.github.io/CsvHelper/. It should have a console front end. It is your choice how simple or complex you make it including if and how you
 choose to store data.
@@ -21,7 +24,7 @@ If you have time you are welcome to provide additional features however we are l
 , clean code and
 design over complexity of what the application can do.
 
-# Feedback
+## Feedback
 Here is the feedback I recieved for my abysmal first attempt. I have tried to fix this in this attempt.
 
 - There's no real structure
