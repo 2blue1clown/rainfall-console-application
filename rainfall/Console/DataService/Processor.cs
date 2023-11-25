@@ -6,14 +6,11 @@ namespace DataService;
 
 public class Processor : IProcessor
 {
-    IEnumerable<RainfallData> rainfallData;
-    IEnumerable<DeviceData> deviceData;
+    private IEnumerable<RainfallData> rainfallData;
+    private IEnumerable<DeviceData> deviceData;
     public DateTime currentTime;
-
-
     public Processor() { }
-
-    public Processor(IEnumerable<RainfallData> rainfallData, IEnumerable<DeviceData> deviceData)
+    public void SetData(IEnumerable<RainfallData> rainfallData, IEnumerable<DeviceData> deviceData)
     {
         this.rainfallData = rainfallData.Where(r => r.Id.Length > 0);
         this.deviceData = deviceData.Where(d => d.Id.Length > 0);
@@ -23,6 +20,18 @@ public class Processor : IProcessor
 
     private void CheckData()
     {
+        if (!deviceData.Any())
+        {
+            Console.WriteLine("ERROR: No devices provided in the devices data file");
+            Environment.Exit(1);
+        }
+
+        if (!rainfallData.Any())
+        {
+            Console.WriteLine("ERROR: No valid rainfall data provided in folder");
+            Environment.Exit(1);
+        }
+
         if (deviceData.DistinctBy(d => d.Id).Count() != deviceData.Count())
         {
             Console.WriteLine("WARNING: There are duplicate ids in devices. Removing duplicates and proceeding\n");

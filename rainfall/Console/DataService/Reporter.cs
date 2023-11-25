@@ -1,15 +1,11 @@
-using Models;
-using static DataService.Processor;
 
 namespace DataService;
-
-public class Reporter
+public class Reporter : IReporter
 {
     IProcessor p;
 
     public Reporter(IProcessor p)
     {
-
         this.p = p;
     }
 

@@ -2,6 +2,7 @@ using Models;
 
 public interface IProcessor
 {
+    public void SetData(IEnumerable<RainfallData> rainfallData, IEnumerable<DeviceData> deviceData);
     IEnumerable<TrendData> Trends { get; }
     IEnumerable<AverageData> Averages { get; }
     IEnumerable<ClassificationData> Classifications { get; }
