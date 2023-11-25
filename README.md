@@ -49,9 +49,28 @@ I showed a friend of mine my code to get the following feedback.
 ## How I used SOLID principles
 
 ### Single Responsibility Principle
-TODO
+Each class shoule do one thing and one thing only. 
+#### Implementaion
+- FileService is responsible for reading data in from files.
+- Console is responsible for recieving inputs and giving the outputs.
+- App is responsible for passing data around the services.
+- ReportService is responsible for generating a Report data for each device
+- DataService responsible for processing the data
+- Program is responsible for the dependancy injection
+
 ### Open-Closed Principle
-TODO
+Classes should be open to extension but closed to modification. Ie we should be able to add new functionality without having to change any of the existing classes.
+#### Implementation
+I'm not gonna lie this one was pretty hard for me. I tried to think about scenarios where the requirements might change... and if I would have to change existing classes.
+
+Maybe the business additionally wanted to be show reports from the data processed differently
+  - I would have to implement some kind of system to handle processing multiple ways at the same time... but I wouldnt have to change the current processor.
+  - I would implement a new class that implements the IProcessor interface. Add this to the multiple processor system.
+Maybe the business wanted to lprocess a different type of data:
+  - I would need to implement a new model, processor, and reporter and report model but none of what currently exists would have to change.
+  - I might have some trouble because IProcessor specifies, trend, average and classification... the new data might not match this. In which case I would have to think about something new..
+  - Should I change processor to just have output data or something?
+
 ### Liskov Substitution Principle
 TODO
 ### Interface Segregation Principle
