@@ -1,9 +1,10 @@
 ﻿
+using System.Data;
 using Models;
 
 namespace DataService;
 
-public class Processor
+public class Processor : IProcessor
 {
     IEnumerable<RainfallData> rainfallData;
     IEnumerable<DeviceData> deviceData;
@@ -18,7 +19,6 @@ public class Processor
         this.deviceData = deviceData.Where(d => d.Id.Length > 0);
         currentTime = this.rainfallData.Max(row => row.Time);
         CheckData();
-
     }
 
     private void CheckData()
@@ -54,6 +54,13 @@ public class Processor
 
     }
 
+    private IEnumerable<IGrouping<string, RainfallData>>? groupedRainfallData
+    {
+        get
+        {
+            return from row in rainfallData group row by row.Id into idGroup select idGroup;
+        }
+    }
     private IEnumerable<RainfallData> recentRainfallData
     {
         get
@@ -71,72 +78,45 @@ public class Processor
             return from row in recentRainfallData group row by row.Id into idGroup select idGroup;
         }
     }
-    private IEnumerable<IGrouping<string, RainfallData>>? groupedRainfallData
-    {
-        get
-        {
-            return from row in rainfallData group row by row.Id into idGroup select idGroup;
-        }
-    }
-    public Dictionary<string, double> Averages
-    {
-        get
-        {
-            var averages = new Dictionary<string, double>();
-            foreach (var g in groupedRecentRainfallData)
-            {
-                averages.Add(g.Key, g.Select(row => row.Rainfall).Average());
-            }
-            return averages;
-        }
-    }
-    public Dictionary<string, Classification> Classifications
-    {
-        get
-        {
-            var classifications = new Dictionary<string, Classification>();
-            foreach (var g in groupedRecentRainfallData)
-            {
-                classifications.Add(g.Key, Classify(g.Select(row => row.Rainfall)));
-            }
-            return classifications;
-        }
-    }
-    public Dictionary<string, Trend> Trends
-    {
-        get
-        {
-            var Trends = new Dictionary<string, Trend>();
-            foreach (var g in groupedRainfallData)
-            {
-                Trends.Add(g.Key, DetermineTrend(g.Select(row => row.Rainfall)));
-            }
-            return Trends;
-        }
-    }
 
-    public List<ReportData> reportData
+    public IEnumerable<DeviceData> DeviceInfo { get { return deviceData; } }
+
+    public IEnumerable<AverageData> Averages
     {
         get
         {
-            var devices = deviceData.ToDictionary(row => row.Id);
-            var data = new List<ReportData>();
-            foreach (var key in Averages.Keys)
-            {
-                data.Add(new ReportData()
-                {
-                    Id = key,
-                    Avg = Averages[key],
-                    Classification = Classifications[key],
-                    Trend = Trends[key],
-                    Name = devices[key].Name,
-                    Location = devices[key].Location
-                });
-            }
-            return data;
+            return from g in groupedRecentRainfallData
+                   select new AverageData()
+                   {
+                       Id = g.Key,
+                       Average = g.Select(row => row.Rainfall).Average()
+                   };
         }
     }
-
+    public IEnumerable<ClassificationData> Classifications
+    {
+        get
+        {
+            return from g in groupedRecentRainfallData
+                   select new ClassificationData()
+                   {
+                       Id = g.Key,
+                       Classification = Classify(g.Select(row => row.Rainfall))
+                   };
+        }
+    }
+    public IEnumerable<TrendData> Trends
+    {
+        get
+        {
+            return from g in groupedRainfallData
+                   select new TrendData()
+                   {
+                       Id = g.Key,
+                       Trend = DetermineTrend(g.Select(row => row.Rainfall))
+                   };
+        }
+    }
     public Classification Classify(IEnumerable<double> data)
     {
         if (data.Any(n => n > 30) || data.Average() >= 15)
@@ -146,7 +126,6 @@ public class Processor
         else if (data.Average() >= 10) return Classification.AMBER;
         else return Classification.GREEN;
     }
-
     public Trend DetermineTrend(IEnumerable<double> data)
     {
 
@@ -164,12 +143,7 @@ public class Processor
         public double X { get; set; }
         public double Y { get; set; }
     }
-    /// <summary>
-    /// Found most of method from the internet because I do not know how to calculate a linear regression
-    /// </summary>
-    /// <param name="xValues"></param>
-    /// <param name="yVals"></param>
-    /// <returns></returns>
+
     private static double Slope(IEnumerable<Coord> data)
     {
 

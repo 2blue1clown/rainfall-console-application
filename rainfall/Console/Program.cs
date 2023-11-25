@@ -31,8 +31,9 @@ if (!rainfall_data.Any())
 }
 
 Console.WriteLine();
-var processor = new Processor(rainfall_data, device_data);
-foreach (var report in processor.reportData)
+IProcessor p = new Processor(rainfall_data, device_data);
+var reporter = new Reporter(p);
+foreach (var report in reporter.Reports)
 {
     Console.WriteLine(report);
 }
