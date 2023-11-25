@@ -99,6 +99,7 @@ public class Processor : IProcessor
                    {
                        Id = g.Key,
                        Average = g.Select(row => row.Rainfall).Average()
+                       //    Average = (from row in g select row.Rainfall).Average()
                    };
         }
     }
@@ -110,7 +111,8 @@ public class Processor : IProcessor
                    select new ClassificationData()
                    {
                        Id = g.Key,
-                       Classification = Classify(g.Select(row => row.Rainfall))
+                       //     Classification = Classify(g.Select(row => row.Rainfall))
+                       Classification = Classify(from row in g select row.Rainfall)
                    };
         }
     }
@@ -142,10 +144,12 @@ public class Processor : IProcessor
         var trendData = xValues.Zip(data).Select(coord => new Coord() { X = coord.First, Y = coord.Second });
 
         var slope = Slope(trendData);
-
-        if (slope > 0) return Trend.INCREASING;
-        else if (slope == 0) return Trend.FLAT;
-        else return Trend.DECREASING;
+        return slope switch
+        {
+            > 0 => Trend.INCREASING,
+            0 => Trend.FLAT,
+            _ => Trend.DECREASING
+        };
     }
     private struct Coord
     {
