@@ -3,7 +3,7 @@ using CsvHelper.Configuration.Attributes;
 
 namespace Models;
 
-public class RainfallData : IBaseModel
+public record RainfallData : IBaseModel
 {
     [Index(0)]
     public string Id { get; set; }
@@ -13,11 +13,4 @@ public class RainfallData : IBaseModel
     [Index(2)]
 
     public double Rainfall { get; set; }
-
-    public override string ToString()
-    {
-
-        return string.Format("Id: {0} Time: {1} Rainfall: {2}", this.Id, this.Time, this.Rainfall);
-    }
-
 }

@@ -3,7 +3,7 @@ using Models;
 
 namespace DataService;
 
-public class RainfallReport : IBaseModel
+public record RainfallReport : IBaseModel
 {
     public string Id { get; set; }
     public string Location { get; set; }
