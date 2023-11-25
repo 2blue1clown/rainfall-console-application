@@ -1,12 +1,12 @@
 # rainfall-console-application
 A .NET console application that takes in data from a folder then determines some averages and an average trend.
-The brief for this project is below. It was given to me as a coding interview in which I did a terrible job. This repo is a better version where I try to fix my [earlier mistakes](##first-attempt-feedback).
+The brief for this project is below. It was given to me as a coding interview in which I did a terrible job. This repo is a better version where I try to fix my [earlier mistakes](#first-attempt-feedback).
 While improving my solution I explored using:
 - mulitple .NET projects in a solution
 - .NET Console Applications
 - LINQ
 - File IO
-- [SOLID programming principles](##how-i-used-solid-principles)
+- [SOLID programming principles](#how-i-used-solid-principles)
 
 ## The Problem: Fuzion Inc. Manages a flood detection programme. 
 They have devices in the field that take rainfall readings which are sent to main office via ftp as a .csv file.
