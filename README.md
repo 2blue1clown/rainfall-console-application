@@ -39,4 +39,22 @@ Here is the feedback I recieved for my abysmal first attempt. I have tried to fi
 - Had a small attempt at the trend, but didn't seem to get very far.
 - Output is ok, a little bare bones.
 - Technical knowledge seems ok, but could do with some training.
+
+## Second Attempt Feedback (looking at commit f9e0061)
+I showed a friend of mine my code to get the following feedback.
+- still does not use many of the SOLID programming principles.
+- the solution over does it with the number of projects... this increases the build times and is just a bit unnessercy. I should just use classes to seperate concerns.
+- don't make properties public just so that I can test them. This is a SIN! Instead make another class where that function/property is public and give that to the class where it was originally private. This has the advantage of forcing loosly coupled code.
+- (minor) in my core service I am losing the advantage of IEnumerables by putting putting the entire enumerable in a dictionary. Instead I should make another enumerable that has the properties that I want. That way if someone just wants to get the first few elements then they can without having to load the entire thing.
 ## How I used SOLID principles
+
+### Single Responsibility Principle
+TODO
+### Open-Closed Principle
+TODO
+### Liskov Substitution Principle
+TODO
+### Interface Segregation Principle
+TOOD
+### Dependency Inversion Principle
+TOOD
