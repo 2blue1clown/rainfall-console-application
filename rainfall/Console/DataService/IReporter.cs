@@ -2,7 +2,7 @@
 
 namespace DataService;
 
-public interface IReporter
+public interface IReporter<T, V, R>
 {
-    public IEnumerable<Report> Reports { get; }
+    public IEnumerable<R> Reports { get; }
 }

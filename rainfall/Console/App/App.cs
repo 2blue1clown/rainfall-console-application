@@ -1,24 +1,27 @@
 using DataService;
-using Models;
 
-public class App
+public class App<T, V, R>
 {
     string[] args;
-    IEnumerable<RainfallData> rainfallData;
-    IEnumerable<DeviceData> deviceData;
-    public App(string[] args, IProcessor p, IReporter r)
+    IEnumerable<T> data;
+    IEnumerable<V> deviceData;
+    IFileReader f;
+
+    public App(string[] args, IFileReader f, IProcessor<T, V> p, IReporter<T, V, R> r)
     {
+        this.f = f;
         this.args = args;
         CheckArgs();
         LoadData(args[0], args[1]);
 
-        if (rainfallData == null || deviceData == null)
+        if (data == null || deviceData == null)
         {
             Console.WriteLine("ERROR: No data to process.");
             Environment.Exit(1);
         }
 
-        p.SetData(rainfallData, deviceData);
+        p.SetData(data, deviceData);
+
         foreach (var report in r.Reports)
         {
             Console.WriteLine(report);
@@ -36,7 +39,7 @@ public class App
 
     private void LoadData(string devicePath, string dataFolderPath)
     {
-        rainfallData = FileService.FileService.LoadFolderData<RainfallData>(dataFolderPath);
-        deviceData = FileService.FileService.LoadFileData<DeviceData>(devicePath);
+        data = f.LoadFolderData<T>(dataFolderPath);
+        deviceData = f.LoadFileData<V>(devicePath);
     }
 }

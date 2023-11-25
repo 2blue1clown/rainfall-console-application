@@ -1,12 +1,21 @@
 using Models;
 
-public interface IProcessor
+
+/// <summary>
+/// Responsible for finding averages, trends and classifications from data.
+/// 
+/// T is the type of individual data points
+/// V is the type of data able the device that collected the individual data points
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <typeparam name="V"></typeparam>
+public interface IProcessor<T, V>
 {
-    public void SetData(IEnumerable<RainfallData> rainfallData, IEnumerable<DeviceData> deviceData);
+    public void SetData(IEnumerable<T> data, IEnumerable<V> deviceData);
     IEnumerable<TrendData> Trends { get; }
     IEnumerable<AverageData> Averages { get; }
     IEnumerable<ClassificationData> Classifications { get; }
-    IEnumerable<DeviceData> DeviceInfo { get; }
+    IEnumerable<V> DeviceInfo { get; }
 }
 
 public enum Classification { GREEN, RED, AMBER }

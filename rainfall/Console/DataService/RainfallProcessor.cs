@@ -4,12 +4,12 @@ using Models;
 
 namespace DataService;
 
-public class Processor : IProcessor
+public class RainfallProcessor : IProcessor<RainfallData, DeviceData>
 {
     private IEnumerable<RainfallData> rainfallData;
     private IEnumerable<DeviceData> deviceData;
     public DateTime currentTime;
-    public Processor() { }
+    public RainfallProcessor() { }
     public void SetData(IEnumerable<RainfallData> rainfallData, IEnumerable<DeviceData> deviceData)
     {
         this.rainfallData = rainfallData.Where(r => r.Id.Length > 0);

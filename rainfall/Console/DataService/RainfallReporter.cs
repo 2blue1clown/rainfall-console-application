@@ -1,16 +1,16 @@
 
+using Models;
 namespace DataService;
-public class Reporter : IReporter
+public class RainfallReporter : IReporter<RainfallData, DeviceData, RainfallReport>
 {
-    IProcessor p;
-
-    public Reporter(IProcessor p)
+    IProcessor<RainfallData, DeviceData> p;
+    public RainfallReporter(IProcessor<RainfallData, DeviceData> p)
     {
         this.p = p;
     }
 
     // implement this
-    public IEnumerable<Report> Reports
+    public IEnumerable<RainfallReport> Reports
     {
         get
         {
@@ -18,7 +18,7 @@ public class Reporter : IReporter
                    join trend in p.Trends on average.Id equals trend.Id
                    join classification in p.Classifications on average.Id equals classification.Id
                    join device in p.DeviceInfo on average.Id equals device.Id
-                   select new Report()
+                   select new RainfallReport()
                    {
                        Id = average.Id,
                        Average = average.Average,

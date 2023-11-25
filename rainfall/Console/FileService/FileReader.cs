@@ -4,7 +4,7 @@ using CsvHelper;
 
 namespace FileService;
 
-public class FileService
+public class FileReader : IFileReader
 {
     public static IEnumerable<T> LoadFileData<T>(string path)
     {

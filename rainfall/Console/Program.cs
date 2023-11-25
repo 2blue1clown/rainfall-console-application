@@ -1,8 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using DataService;
+using FileService;
+using Models;
 
 // Dependency Injection
-var p = new Processor();
-var r = new Reporter(p);
+var f = new FileReader();
+var p = new RainfallProcessor();
+var r = new RainfallReporter(p);
 
-var app = new App(args, p, r);
+var app = new App<RainfallData, DeviceData, RainfallReport>(args, f, p, r);
