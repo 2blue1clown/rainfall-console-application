@@ -99,7 +99,6 @@ public class Processor : IProcessor
                    {
                        Id = g.Key,
                        Average = g.Select(row => row.Rainfall).Average()
-                       //    Average = (from row in g select row.Rainfall).Average()
                    };
         }
     }
@@ -111,8 +110,7 @@ public class Processor : IProcessor
                    select new ClassificationData()
                    {
                        Id = g.Key,
-                       //     Classification = Classify(g.Select(row => row.Rainfall))
-                       Classification = Classify(from row in g select row.Rainfall)
+                       Classification = Classify(g.Select(row => row.Rainfall))
                    };
         }
     }
