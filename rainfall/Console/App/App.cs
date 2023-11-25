@@ -7,13 +7,14 @@ public class App<T, V, R>
     IEnumerable<V> deviceData;
     IFileReader f;
 
-    public App(string[] args, IFileReader f, IProcessor<T, V> p, IReporter<T, V, R> r)
+    public App(string[] args, IFileReader f, IProcessor<T, V> p, IReporter<R> r)
     {
         this.f = f;
         this.args = args;
         CheckArgs();
         LoadData(args[0], args[1]);
 
+        // completed null check here to ensure editor new data is not null.
         if (data == null || deviceData == null)
         {
             Console.WriteLine("ERROR: No data to process.");
@@ -27,6 +28,7 @@ public class App<T, V, R>
             Console.WriteLine(report);
         }
     }
+
     private void CheckArgs()
     {
         if (args.Length != 2)

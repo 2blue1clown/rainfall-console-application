@@ -1,7 +1,7 @@
 
 using Models;
 namespace DataService;
-public class RainfallReporter : IReporter<RainfallData, DeviceData, RainfallReport>
+public class RainfallReporter : IReporter<RainfallReport>
 {
     IProcessor<RainfallData, DeviceData> p;
     public RainfallReporter(IProcessor<RainfallData, DeviceData> p)
