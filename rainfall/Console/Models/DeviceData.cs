@@ -1,7 +1,7 @@
 using CsvHelper.Configuration.Attributes;
 
-namespace CoreService.Models;
-public class DeviceData : IId
+namespace Models;
+public class DeviceData : IBaseModel
 {
     [Index(0)]
     public string Id { get; set; }

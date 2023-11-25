@@ -1,13 +1,13 @@
 
-using CoreService.Models;
+using Models;
 
-namespace CoreService;
+namespace DataService;
 
 public enum Classification { GREEN, RED, AMBER }
 public enum Trend { INCREASING, DECREASING, FLAT }
 
 
-public class ReportData : IId
+public class ReportData : IBaseModel
 {
     public string Id { get; set; }
     public string Location { get; set; }

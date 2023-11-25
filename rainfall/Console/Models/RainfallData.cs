@@ -1,9 +1,9 @@
 
 using CsvHelper.Configuration.Attributes;
 
-namespace CoreService.Models;
+namespace Models;
 
-public class RainfallData : IId
+public class RainfallData : IBaseModel
 {
     [Index(0)]
     public string Id { get; set; }

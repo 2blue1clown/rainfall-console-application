@@ -1,7 +1,7 @@
 ﻿
-using CoreService.Models;
+using Models;
 
-namespace CoreService;
+namespace DataService;
 
 public class Processor
 {

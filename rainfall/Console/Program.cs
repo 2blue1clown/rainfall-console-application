@@ -1,8 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using CoreService;
-using CoreService.Models;
 
+
+using DataService;
+using Models;
 
 if (args.Length < 2)
 {
@@ -14,8 +15,8 @@ if (args.Length < 2)
 var device_path = args[0];
 var data_folder = args[1];
 
-var rainfall_data = FileService.DataReader.LoadFolderData<RainfallData>(data_folder);
-var device_data = FileService.DataReader.LoadFileData<DeviceData>(device_path);
+var rainfall_data = FileService.FileService.LoadFolderData<RainfallData>(data_folder);
+var device_data = FileService.FileService.LoadFileData<DeviceData>(device_path);
 
 if (!device_data.Any())
 {
