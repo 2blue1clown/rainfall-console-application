@@ -6,7 +6,7 @@ namespace FileService;
 
 public class FileReader : IFileReader
 {
-    public static IEnumerable<T> LoadFileData<T>(string path)
+    public IEnumerable<T> LoadFileData<T>(string path)
     {
         Console.WriteLine("Attempting to load file data from {0}", path);
 
@@ -24,7 +24,7 @@ public class FileReader : IFileReader
         return data;
     }
 
-    public static IEnumerable<T> LoadFolderData<T>(string path)
+    public IEnumerable<T> LoadFolderData<T>(string path)
     {
         Console.WriteLine("Attempting to load folder data from {0}", path);
         var collection = Enumerable.Empty<T>();
@@ -37,7 +37,17 @@ public class FileReader : IFileReader
         return collection;
     }
 
-    private static IEnumerable<T> ExecuteWithLogging<T>(Func<IEnumerable<T>> action)
+    private IEnumerable<string> GetFiles(string path)
+    {
+        var files = ExecuteWithLogging(() =>
+        {
+            var files = Directory.EnumerateFiles(path);
+            return files;
+        });
+        return files;
+    }
+
+    private IEnumerable<T> ExecuteWithLogging<T>(Func<IEnumerable<T>> action)
     {
         try
         {
@@ -73,15 +83,6 @@ public class FileReader : IFileReader
                               $"{e.HResult & 0x0000FFFF}\nMessage: {e.Message}");
         }
         return Enumerable.Empty<T>().ToList();
-    }
-    private static IEnumerable<string> GetFiles(string path)
-    {
-        var files = ExecuteWithLogging(() =>
-        {
-            var files = Directory.EnumerateFiles(path);
-            return files;
-        });
-        return files;
     }
 
 }
