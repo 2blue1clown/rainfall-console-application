@@ -4,7 +4,15 @@ using Models;
 
 namespace DataService;
 
-public class RainfallProcessor : IProcessor<RainfallData, DeviceData>
+public interface IRainfallProcessor<T, V> :
+                    IAveragesProcessor,
+                    ITrendsProcessor,
+                    IClassificationsProcessor,
+                    IDeviceInfoProcessor<DeviceData>,
+                    IDuoProcessor<T, V>
+{ }
+
+public class RainfallProcessor : IRainfallProcessor<RainfallData, DeviceData>
 {
     private IEnumerable<RainfallData> rainfallData;
     private IEnumerable<DeviceData> deviceData;
