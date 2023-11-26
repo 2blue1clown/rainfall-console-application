@@ -1,7 +1,7 @@
 
 using CsvHelper.Configuration.Attributes;
 
-namespace Models;
+namespace DataService.Models;
 
 public record RainfallData : IBaseModel
 {

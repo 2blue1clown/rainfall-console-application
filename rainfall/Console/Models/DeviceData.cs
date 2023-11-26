@@ -1,6 +1,6 @@
 using CsvHelper.Configuration.Attributes;
 
-namespace Models;
+namespace DataService.Models;
 public record DeviceData : IBaseModel
 {
     [Index(0)]
