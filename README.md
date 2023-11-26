@@ -77,8 +77,22 @@ I'm not gonna lie this one was pretty hard for me. I tried to think about scenar
 
 
 ### Liskov Substitution Principle
-TODO
+States that if you replace a sub-class with its base class it should not break the program.
+
+#### Implementation
+I am not any inheritance like this.
+
 ### Interface Segregation Principle
-TODO
+States that you should not have interfaces prescribe functions that the client does not want to use.
+
+#### Implementation
+IRainfallProcessor is a blend of IAverageProcessor, ITrendProcessor... because I feel that if the requirements were to change I might need another processor that only implements some of these features rather than all of them. This way each processor interface only does one thing and I can blend them together to describe the desired functionality.
+
+#### Comment
+I think that doing this at this stage of the project is actually a bit silly. It has complicated my code and seems quite unnessercary, considering I dont know if there would ever be a requirement change like this. "Premature optimisation is the root of all evil" is a quote that springs to mind. 
+
 ### Dependency Inversion Principle
-TOOD
+Have classes depend on abstract classes (interfaces) instead of direct implementations. This creates loosely coupled code.
+
+#### Implementation
+I have my program file serve as the injector to the app class which is dependent on interfaces. I could totally replace the processor and reporter without the app knowing and it would work perfectly.
