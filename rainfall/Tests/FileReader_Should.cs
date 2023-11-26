@@ -1,8 +1,10 @@
-using CoreService.Models;
 
-namespace FileServiceTests;
+using DataService.Models;
+using FileService;
 
-public class FileService_Should
+namespace Tests;
+
+public class FileReader_Should
 {
 
     private string relativePathPrefix = "..\\..\\..\\..\\";
@@ -15,7 +17,8 @@ public class FileService_Should
     public void LoadedFileDataHasCorrectCount(string relativePath, int expected)
     {
         var path = Path.Combine(Directory.GetCurrentDirectory(), relativePathPrefix, relativePath);
-        var data = FileService.DataReader.LoadFileData<RainfallData>(path);
+        var fileReader = new FileReader();
+        var data = fileReader.LoadFileData<RainfallData>(path);
         Assert.Equal(data.Count(), expected);
     }
 
@@ -27,7 +30,8 @@ public class FileService_Should
     public void LoadedFolderDataHasCorrectCount(string relativePath, int expected)
     {
         var path = Path.Combine(Directory.GetCurrentDirectory(), relativePathPrefix, relativePath);
-        var data = FileService.DataReader.LoadFolderData<RainfallData>(path);
+        var fileReader = new FileReader();
+        var data = fileReader.LoadFolderData<RainfallData>(path);
         Assert.Equal(data.Count(), expected);
     }
 }

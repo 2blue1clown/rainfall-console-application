@@ -1,9 +1,12 @@
-using CoreService;
-using CoreService.Models;
 
-namespace CoreServiceTests;
 
-public class CoreService_Should
+using DataService;
+using DataService.Models;
+using FileService;
+
+namespace Tests;
+
+public class RainfallProcessor_Should
 {
     private string relativePathPrefix = "..\\..\\..\\..\\";
 
@@ -11,11 +14,15 @@ public class CoreService_Should
     [InlineData(new[] { 2020, 6, 5, 11, 30, 0 }, "..\\testData\\Data1.csv")]
     public void IdentifyCurrentTime(int[] expected, string relativePath)
     {
+        var fileReader = new FileReader();
         var path = Path.Combine(Directory.GetCurrentDirectory(), relativePathPrefix, relativePath);
         var expectedTime = new DateTime(expected[0], expected[1], expected[2], expected[3], expected[4], expected[5]);
-        var rainfallData = FileService.DataReader.LoadFileData<RainfallData>(path);
-        var p = new Processor(rainfallData, Enumerable.Empty<DeviceData>());
-        Assert.Equal(p.currentTime, expectedTime);
+        var rainfallData = fileReader.LoadFileData<RainfallData>(path);
+        var processor = new RainfallProcessor();
+
+        processor.SetData(rainfallData, Enumerable.Empty<DeviceData>());
+
+        Assert.Equal(processor.currentTime, expectedTime);
     }
 
     [Theory]
@@ -24,8 +31,8 @@ public class CoreService_Should
     [InlineData(Trend.DECREASING, new[] { 0.0, 5, 2, 3, 0 })]
     public void IdentifyTrend(Trend result, double[] input)
     {
-        var p = new Processor();
-        Assert.Equal(result, p.DetermineTrend([.. input]));
+        var processor = new RainfallProcessor();
+        Assert.Equal(result, processor.DetermineTrend([.. input]));
     }
 
     [Theory]
@@ -35,8 +42,8 @@ public class CoreService_Should
     [InlineData(Classification.GREEN, new[] { 0, 5, 1, 13.0 })]
     public void ClassifyRainfall(Classification result, double[] input)
     {
-        var p = new Processor();
-        Assert.Equal(result, p.Classify([.. input]));
+        var processor = new RainfallProcessor();
+        Assert.Equal(result, processor.Classify([.. input]));
     }
 
 
