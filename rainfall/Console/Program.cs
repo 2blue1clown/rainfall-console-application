@@ -8,4 +8,4 @@ var f = new FileReader();
 var p = new RainfallProcessor();
 var r = new RainfallReporter(p);
 
-var app = new App<RainfallData, DeviceData, RainfallReport>(args, f, p, r);
+var app = new App<RainfallData, DeviceData, RainfallReport>(args, f, r);

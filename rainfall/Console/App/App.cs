@@ -7,7 +7,7 @@ public class App<T, V, R>
     IEnumerable<V> deviceData;
     IFileReader f;
 
-    public App(string[] args, IFileReader f, IProcessor<T, V> p, IReporter<R> r)
+    public App(string[] args, IFileReader f, IReporter<T, V, R> r)
     {
         this.f = f;
         this.args = args;
@@ -21,7 +21,7 @@ public class App<T, V, R>
             Environment.Exit(1);
         }
 
-        p.SetData(data, deviceData);
+        r.SetData(data, deviceData);
 
         foreach (var report in r.Reports)
         {

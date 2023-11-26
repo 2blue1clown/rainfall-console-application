@@ -1,12 +1,18 @@
 
 using Models;
 namespace DataService;
-public class RainfallReporter : IReporter<RainfallReport>
+
+public class RainfallReporter : IReporter<RainfallData, DeviceData, RainfallReport>
 {
-    IProcessor<RainfallData, DeviceData> p;
-    public RainfallReporter(IProcessor<RainfallData, DeviceData> p)
+    IRainfallProcessor<RainfallData, DeviceData> p;
+    public RainfallReporter(IRainfallProcessor<RainfallData, DeviceData> p)
     {
         this.p = p;
+    }
+
+    public void SetData(IEnumerable<RainfallData> rainfallData, IEnumerable<DeviceData> deviceData)
+    {
+        p.SetData(rainfallData, deviceData);
     }
 
     // implement this

@@ -1,21 +1,33 @@
 using Models;
 
+namespace DataService;
 
-/// <summary>
-/// Responsible for finding averages, trends and classifications from data.
-/// 
-/// T is the type of individual data points
-/// V is the type of data able the device that collected the individual data points
-/// </summary>
-/// <typeparam name="T"></typeparam>
-/// <typeparam name="V"></typeparam>
-public interface IProcessor<T, V>
+
+public interface IDuoProcessor<T, V>
 {
-    public void SetData(IEnumerable<T> data, IEnumerable<V> deviceData);
-    IEnumerable<TrendData> Trends { get; }
-    IEnumerable<AverageData> Averages { get; }
+    public void SetData(IEnumerable<T> data1, IEnumerable<V> data2);
+}
+
+public interface IDeviceInfoProcessor<T>
+{
+    IEnumerable<T> DeviceInfo { get; }
+
+}
+public interface IClassificationsProcessor
+{
     IEnumerable<ClassificationData> Classifications { get; }
-    IEnumerable<V> DeviceInfo { get; }
+}
+
+
+public interface IAveragesProcessor
+{
+    IEnumerable<AverageData> Averages { get; }
+}
+
+public interface ITrendsProcessor
+{
+    IEnumerable<TrendData> Trends { get; }
+
 }
 
 public enum Classification { GREEN, RED, AMBER }
@@ -38,5 +50,4 @@ public record AverageData : IBaseModel
 {
     public string Id { get; set; }
     public double Average { get; set; }
-
 }
