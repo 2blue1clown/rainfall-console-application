@@ -4,8 +4,8 @@ using FileService;
 using DataService.Models;
 
 // Dependency Injection
-var f = new FileReader();
-var p = new RainfallProcessor();
-var r = new RainfallReporter(p);
+var fileReader = new FileReader();
+var processor = new RainfallProcessor();
+var reporter = new RainfallReporter(processor);
 
-var app = new App<RainfallData, DeviceData, RainfallReport>(args, f, r);
+var app = new App<RainfallData, DeviceData, RainfallReport>(args, fileReader, reporter);

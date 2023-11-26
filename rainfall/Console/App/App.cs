@@ -5,11 +5,11 @@ public class App<T, V, R>
     string[] args;
     IEnumerable<T> data;
     IEnumerable<V> deviceData;
-    IFileReader f;
+    IFileReader fileReader;
 
-    public App(string[] args, IFileReader f, IReporter<T, V, R> r)
+    public App(string[] args, IFileReader fileReader, IReporter<T, V, R> reporter)
     {
-        this.f = f;
+        this.fileReader = fileReader;
         this.args = args;
         CheckArgs();
         LoadData(args[0], args[1]);
@@ -21,9 +21,9 @@ public class App<T, V, R>
             Environment.Exit(1);
         }
 
-        r.SetData(data, deviceData);
+        reporter.SetData(data, deviceData);
 
-        foreach (var report in r.Reports)
+        foreach (var report in reporter.Reports)
         {
             Console.WriteLine(report);
         }
@@ -41,7 +41,7 @@ public class App<T, V, R>
 
     private void LoadData(string devicePath, string dataFolderPath)
     {
-        data = f.LoadFolderData<T>(dataFolderPath);
-        deviceData = f.LoadFileData<V>(devicePath);
+        data = fileReader.LoadFolderData<T>(dataFolderPath);
+        deviceData = fileReader.LoadFileData<V>(devicePath);
     }
 }
