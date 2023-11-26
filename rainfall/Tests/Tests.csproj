@@ -23,8 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CoreService\CoreService.csproj" />
-    <ProjectReference Include="..\FileService\FileService.csproj" />
+    <ProjectReference Include="..\Console\Console.csproj" />
   </ItemGroup>
 
-</Project>  
+</Project>
