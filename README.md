@@ -51,7 +51,7 @@ I showed a friend of mine my code to get the following feedback.
 ### Single Responsibility Principle
 Each class shoule do one thing and one thing only. 
 #### Implementaion
-- FileService is responsible for reading data in from files.
+- FileReader is responsible for reading data in from files.
 - Console is responsible for recieving inputs and giving the outputs.
 - App is responsible for passing data around the services.
 - ReportService is responsible for generating a Report data for each device
@@ -64,19 +64,21 @@ Classes should be open to extension but closed to modification. We should be abl
 I'm not gonna lie this one was pretty hard for me. I tried to think about scenarios where the requirements might change... and if I would have to change existing classes.
 
 1. Maybe the business wants to also show reports from the data processed differently but with the same report
-  - I would have to implement some kind of system to handle processing multiple ways at the same time... but I wouldnt have to change the current processor.
+  - I would have to implement some kind of system to run multiple processors and display multiple reports... but I wouldnt have to change the current processor.
   - I would implement a new class that implements the IProcessor interface. Add this to the multiple processor system.
 
 2. Maybe the business wanted to process a different type of data but have the same report:
-  - I would need to implement a new model, processor, and reporter and report model but none of what currently exists would have to change.
+  - I would need to implement a new data model and processor.
 
 3. Maybe the business wants to add more aspects to the report, ie the median and the mode rainfall.
 - I would have to change the existing processor and report files.
+- In an idea world I would be able to have a processor which takes in processes (average, median) and spit out the results that then get interpretted by the reports. Doing this poses a large challenge however because not all processes return the same type, and its a bit of a headache making it all work with C#
+- Not gonna lie, thinking about this sent me down a rabbit hole of whatifs. This is a current weakness in my implementation and to solve it would need to change the entire structure of my application, which is a project for the future.
 
 
 ### Liskov Substitution Principle
 TODO
 ### Interface Segregation Principle
-TOOD
+TODO
 ### Dependency Inversion Principle
 TOOD
