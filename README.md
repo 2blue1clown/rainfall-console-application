@@ -9,6 +9,7 @@ While improving my solution I explored using:
 - File IO
 - [SOLID programming principles](#how-i-used-solid-principles)
 - Testing with Xunit (I explored generating tests using github co-pilot and was pleasently surprised)
+- Using VS Code as a debugger for .NET
 
 Previously I had only explored .NET in the context of ASP.NET which was great, but this was a supurb project to help me understand more base level .NET and C#.
 
