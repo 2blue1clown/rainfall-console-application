@@ -8,7 +8,9 @@ While improving my solution I explored using:
 - LINQ
 - File IO
 - [SOLID programming principles](#how-i-used-solid-principles)
-- Testing with Xunit
+- Testing with Xunit (I explored generating tests using github co-pilot and was pleasently surprised)
+
+Previously I had only explored .NET in the context of ASP.NET which was great, but this was a supurb project to help me understand more base level .NET and C#.
 
 ## The Problem: Fuzion Inc. Manages a flood detection programme. 
 They have devices in the field that take rainfall readings which are sent to main office via ftp as a .csv file.
@@ -98,3 +100,6 @@ Have classes depend on abstract classes (interfaces) instead of direct implement
 
 #### Implementation
 I have my program file serve as the injector to the app class which is dependent on interfaces. I could totally replace the processor and reporter without the app knowing and it would work perfectly.
+
+
+ 
