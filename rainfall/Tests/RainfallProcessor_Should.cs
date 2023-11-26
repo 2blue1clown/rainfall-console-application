@@ -1,5 +1,6 @@
 
 
+using System.Data;
 using DataService;
 using DataService.Models;
 using FileService;
@@ -46,5 +47,28 @@ public class RainfallProcessor_Should
         Assert.Equal(result, processor.Classify([.. input]));
     }
 
+    [Fact]
+    public void IdentifyMostRecentData()
+    {
+        var rainfallData = new List<RainfallData> {
+            new RainfallData(){Id = "1", Rainfall = 1, Time = new DateTime(2020, 6, 5, 4, 0, 0)},
+            new RainfallData(){Id = "2", Rainfall = 30, Time = new DateTime(2020, 6, 5, 3, 30, 0)},
+            new RainfallData(){Id = "3", Rainfall = 10, Time = new DateTime(2020, 6, 5, 3, 0, 0)},
+            new RainfallData(){Id = "4", Rainfall = 0, Time = new DateTime(2020, 6, 5, 0, 0, 0)},
+            new RainfallData(){Id = "5", Rainfall = 0, Time = new DateTime(2020, 6, 4, 23, 30, 0)},
+            new RainfallData(){Id = "6", Rainfall = 0, Time = new DateTime(2020, 6, 4, 23, 0, 0)},
+         };
+
+        var processor = new RainfallProcessor();
+
+        processor.SetData(rainfallData, Enumerable.Empty<DeviceData>());
+
+        var expectedMostRecentData = new List<RainfallData> {
+            new RainfallData(){Id = "1", Rainfall = 1, Time = new DateTime(2020, 6, 5, 4, 0, 0)},
+            new RainfallData(){Id = "2", Rainfall = 30, Time = new DateTime(2020, 6, 5, 3, 30, 0)},
+            new RainfallData(){Id = "3", Rainfall = 10, Time = new DateTime(2020, 6, 5, 3, 0, 0)},
+         };
+        Assert.Equal(processor.recentRainfallData.Count(), expectedMostRecentData.Count());
+    }
 
 }

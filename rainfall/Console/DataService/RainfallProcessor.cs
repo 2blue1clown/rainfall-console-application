@@ -23,7 +23,7 @@ public class RainfallProcessor : IRainfallProcessor<RainfallData, DeviceData>
         this.rainfallData = rainfallData.Where(r => r.Id.Length > 0);
         this.deviceData = deviceData.Where(d => d.Id.Length > 0);
         currentTime = this.rainfallData.Max(row => row.Time);
-        CheckData();
+        // CheckData();
     }
 
     private void CheckData()
@@ -31,13 +31,13 @@ public class RainfallProcessor : IRainfallProcessor<RainfallData, DeviceData>
         if (!deviceData.Any())
         {
             Console.WriteLine("ERROR: No devices provided in the devices data file");
-            Environment.Exit(1);
+            // Environment.Exit(1);
         }
 
         if (!rainfallData.Any())
         {
             Console.WriteLine("ERROR: No valid rainfall data provided in folder");
-            Environment.Exit(1);
+            // Environment.Exit(1);
         }
 
         if (deviceData.DistinctBy(d => d.Id).Count() != deviceData.Count())
@@ -78,7 +78,7 @@ public class RainfallProcessor : IRainfallProcessor<RainfallData, DeviceData>
             return from row in rainfallData group row by row.Id into idGroup select idGroup;
         }
     }
-    private IEnumerable<RainfallData> recentRainfallData
+    public IEnumerable<RainfallData> recentRainfallData
     {
         get
         {
