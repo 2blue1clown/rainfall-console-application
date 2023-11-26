@@ -1,5 +1,5 @@
 
-using Models;
+using DataService.Models;
 namespace DataService;
 
 public class RainfallReporter : IReporter<RainfallData, DeviceData, RainfallReport>

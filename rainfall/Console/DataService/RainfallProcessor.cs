@@ -1,6 +1,6 @@
 ﻿
 using System.Data;
-using Models;
+using DataService.Models;
 
 namespace DataService;
 

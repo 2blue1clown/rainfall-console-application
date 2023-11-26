@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using DataService;
 using FileService;
-using Models;
+using DataService.Models;
 
 // Dependency Injection
 var f = new FileReader();

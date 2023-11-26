@@ -1,4 +1,4 @@
-using Models;
+using DataService.Models;
 
 namespace DataService;
 
